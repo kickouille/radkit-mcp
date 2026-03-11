@@ -1,0 +1,3 @@
+[submodule "radkit-mcp-server-community"]
+	path = radkit-mcp-server-community
+	url = https://github.com/CiscoDevNet/radkit-mcp-server-community

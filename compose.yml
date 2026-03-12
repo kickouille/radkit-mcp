@@ -1,0 +1,15 @@
+services:
+  radkit-mcp:
+    build: .
+    environment:
+      - RADKIT_IDENTITY=user@cisco.com
+      - RADKIT_DEFAULT_SERVICE_SERIAL=service-serial
+      - RADKIT_CERT_B64=${RADKIT_CERT_B64}
+      - RADKIT_KEY_B64=${RADKIT_KEY_B64}
+      - RADKIT_CA_B64=${RADKIT_CA_B64}
+      - RADKIT_KEY_PASSWORD_B64=${RADKIT_KEY_PASSWORD_B64}
+      - MCP_TRANSPORT=sse
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8000
+    ports:
+      - "8000:8000"

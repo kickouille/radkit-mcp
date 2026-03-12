@@ -41,22 +41,21 @@ With this integration, AI assistants can:
 ## Architecture
 
 ```
-┌─────────────────────┐        MCP Protocol         ┌──────────────────────┐
-│   AI Assistant      │◄───────(stdio/SSE)──────────►│  RADKit MCP Server   │
-│  (Claude, Cursor,   │                              │  (this project)      │
-│   etc.)             │                              └──────────┬───────────┘
-└─────────────────────┘                                         │
-                                                                │ RADKit API
-                                                                ▼
-                                                   ┌────────────────────────┐
-                                                   │   Cisco RADKit Cloud   │
-                                                   └────────────┬───────────┘
-                                                                │
-                                                                ▼
-                                                   ┌────────────────────────┐
-                                                   │   Network Devices      │
-                                                   │ (Routers, Switches...) │
-                                                   └────────────────────────┘
+┌─────────────────────┐      MCP/stdio       ┌──────────────────────┐
+│   AI Assistant      │◄────────────────────►│  RADKit MCP Server   │
+│ (Claude, Cursor...) │                      │    (this project)    │
+└─────────────────────┘                      └──────────┬───────────┘
+                                                        │ RADKit API
+                                                        ▼
+                                           ┌────────────────────────┐
+                                           │  Cisco RADKit Cloud    │
+                                           └────────────┬───────────┘
+                                                        │
+                                                        ▼
+                                           ┌────────────────────────┐
+                                           │    Network Devices     │
+                                           │ (Routers, Switches...) │
+                                           └────────────────────────┘
 ```
 
 ---
@@ -201,6 +200,7 @@ radkit-mcp/
 ├── compose.yml                      # Docker Compose service definition
 ├── README.md                        # This file
 └── radkit-mcp-server-community/     # Git submodule (CiscoDevNet)
+    # Core MCP server Python package (radkit_mcp)
 ```
 
 | File | Purpose |
@@ -215,8 +215,8 @@ radkit-mcp/
 
 1. **Docker builds** the image by installing the `radkit-mcp-server-community` Python package using [`uv`](https://github.com/astral-sh/uv)
 2. **At runtime**, the container launches `python -m radkit_mcp`, starting the MCP server
-3. The MCP server communicates with an **AI client over stdio**, following the [Model Context Protocol](https://modelcontextprotocol.io/)
-4. When the AI issues tool calls, the MCP server **authenticates with Cisco RADKit** and proxies commands to enrolled network devices
+3. The MCP server **communicates with an AI client over stdio**, following the [Model Context Protocol](https://modelcontextprotocol.io/)
+4. When the AI issues tool calls, the MCP server **authenticates with Cisco RADKit** using the provided credentials and proxies commands to enrolled network devices
 5. **Results are returned** to the AI client as structured MCP responses
 
 ---
@@ -247,6 +247,7 @@ For issues with the core MCP server logic, please contribute to the upstream rep
 ## License
 
 This project is licensed under the **Apache License 2.0**.
+
 The `radkit-mcp-server-community` submodule is maintained by Cisco DevNet and is subject to its own license terms.
 
 ---
